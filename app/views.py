@@ -249,3 +249,8 @@ class ProfileView(View):
             reg.save()
             messages.success(request, 'Profile Update Successfully')
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
+
+def search(request):
+    q= request.GET['q']
+    data = Product.objects.filter(title__icontains=q).order_by('-id')
+    return render(request, 'app/search.html', {'data':data})

@@ -44,9 +44,13 @@
              </ul>
            </li>
          </ul>
-         <form class="d-flex">
-           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-           <button class="btn btn-warning" type="submit">S</button>
+         <form class="d-flex form-inline my-2 my-lg-0" action="/search">
+          <div class="input-group">
+           <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="q" >
+           <div class="input-group-append">
+            <button class="btn btn-warning" type="submit" id="button-addon2">Search</button>
+           </div>
+          </div>
          </form>
          <div>
           <ul class="navbar-nav me-auto mb-4 mb-lg-0">

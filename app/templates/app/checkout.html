@@ -35,24 +35,22 @@
           <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
             Address: {{forloop.counter}} </label>
         </div>
-        {% endfor %}
-        <div class="text-end">
-          {% comment "" %}
-          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
-          {% endcomment %}
-
+    {% endfor %}
+        <div class="text-center">
           <!--Set up a container element for the button-->
           <div id="paypal-button-container"></div>
+
+          <button type="submit" class="btn btn-secondary mt-3 px-5 fw-bold">Payment on delivery</button>
         </div>
-      </form>
-    </div>
+    </form>
   </div>
+ </div>
 </div>
 {% endblock main-content %}
 
 {% block payment-gateway %}
   <!-- Include the PayPal JavaScript SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AVrMvKQ3cE5XfBgCQ-JwdgMb94yI6zgiS_6GpReTHOSMNtm7TSnkXdmIPDb-m1r97sY7SIU8xJIyMdX3&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdU8NkkrEOEVk5yVwApTs-iBBg8KRm1mYZ9Dd34jdjMfuwoyAyKFQo0K1bvt-XEDWY3OPv6ovPk0eg1m&currency=USD"></script>
 
     <script>
         // Render the PayPal button into #paypal-button-container
