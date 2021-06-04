@@ -15,7 +15,11 @@
             </div>
         {% endfor %}
         <small><a href= "{% url 'password_reset' %}">Forgot password ?</a></small> <br>
-        <input type = "submit" class="btn btn-primary mt-4" value = "Login">
+        <div class="text-center text-primary fw-bold p-1">
+            <input type = "submit" class="btn btn-primary mt-3" value = "Login">&emsp;
+            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-secondary mt-3">
+            <i class="fab fa-facebook-f fa-fw"></i>Login with Facebook</a>
+        </div>
         <br>
         <div class="text-center text-primary fw-bold"><small> New to LaptopTTCM ?<a href= "{% url 'customerregistration' %}"
         class = "text-danger">Create an Account</a> </small> </div>
