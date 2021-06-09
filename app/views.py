@@ -1,3 +1,4 @@
+from django.core import paginator
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -5,10 +6,13 @@ from .models import BRAND_CHOICES, Customer, Cart, Product, OrderPlaced
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from django.contrib import messages
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from app import forms
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template import loader
+
 
 
 class ProductView(View):
@@ -125,11 +129,6 @@ def remove_cart(request):
         }
         return JsonResponse(data)
 
-
-def buy_now(request):
-    return render(request, 'app/buynow.html')
-
-
 @login_required
 def address(request):
     add = Customer.objects.filter(user=request.user)
@@ -155,7 +154,18 @@ def laptop(request, data=None):
     elif data == 'above':
         laptops = Product.objects.filter(category='LT').filter(
             discounted_price__gt=20000000)
-    return render(request, 'app/laptop.html', {'laptops': laptops})
+    paginator = Paginator(laptops, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Nếu page_number không thuộc kiểu integer, trả về page đầu tiên
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # Nếu page không có item nào, trả về page cuối cùng
+        page_obj = paginator.page(paginator.num_pages)
+    return render(request, 'app/laptop.html', {'laptops': laptops, 'page_obj':page_obj})
+
 
 # Accessories
 def accessories(request, data=None):
@@ -169,7 +179,18 @@ def accessories(request, data=None):
     elif data == 'above':
         accessoriess = Product.objects.filter(category='ACC').filter(
             discounted_price__gt=2000000)
-    return render(request, 'app/accessories.html', {'accessoriess': accessoriess})
+    paginator = Paginator(accessoriess, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Nếu page_number không thuộc kiểu integer, trả về page đầu tiên
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # Nếu page không có item nào, trả về page cuối cùng
+        page_obj = paginator.page(paginator.num_pages)
+    return render(request, 'app/accessories.html', {'accessoriess': accessoriess, 'page_obj':page_obj})
+
 
 # Component
 def component(request, data=None):
@@ -183,7 +204,17 @@ def component(request, data=None):
     elif data == 'above':
         components = Product.objects.filter(category='C').filter(
             discounted_price__gt=2000000)
-    return render(request, 'app/component.html', {'components': components})
+    paginator = Paginator(components, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        # Nếu page_number không thuộc kiểu integer, trả về page đầu tiên
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # Nếu page không có item nào, trả về page cuối cùng
+        page_obj = paginator.page(paginator.num_pages)
+    return render(request, 'app/component.html', {'components': components, 'page_obj':page_obj})
 
 
 class CustomerRegistrationView(View):

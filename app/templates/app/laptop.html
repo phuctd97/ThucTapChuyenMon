@@ -24,9 +24,11 @@
    </div>
   </div>
  
-  <div class="col-sm-8">
+
+  <div class="col-sm-9">
    <div class = "row">
-    {% for product in laptops %}
+    {% for product in page_obj %}
+
         <div class = "col-sm-4 text-center mb-4">
             <a href = "{% url 'product-detail' product.id %}" class = "btn">
             <div class = "item">
@@ -38,6 +40,23 @@
             </a>    
         </div>
     {% endfor %}
+    
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item ">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" ><span aria-hidden="true">&laquo;</span></a>
+                </li>
+            {% endif %}
+                <li class="page-item"><a class="page-link" href="#">{{page_obj.number}}</a></li>
+            {% if page_obj.has_next %}    
+                <li class="page-item">
+                <a class="page-link" href="?page={{page_obj.next_page_number}}"><span aria-hidden="true">&raquo;</span></a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
+    
    </div>
   </div>
  </div>

@@ -19,3 +19,26 @@
  font-size: 24px;
  font-weight: bold;
 }
+
+.about{
+    margin-top: 90px;
+    background: #23262d;
+    padding: 60px 0;
+}
+
+.about .about_box {
+    text-align: center;
+}
+.titlepage {
+    text-align: center;
+    padding-bottom: 60px;
+}
+.about .titlepage h2 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+.about .titlepage span {
+    color: #fff;
+    font-size: 17px;
+}
+
