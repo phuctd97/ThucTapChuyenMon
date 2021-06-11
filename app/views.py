@@ -54,7 +54,7 @@ def show_cart(request):
         user = request.user
         cart = Cart.objects.filter(user=user)
         amount = 0.0
-        shipping_amount = 30000
+        shipping_amount = 150000
         total_amount = 0.0
         cart_product = [p for p in Cart.objects.all() if p.user == user]
     if cart_product:
@@ -74,7 +74,7 @@ def plus_cart(request):
         c.quantity += 1
         c.save()
         amount = 0.0
-        shipping_amount = 30000
+        shipping_amount = 150000
         cart_product = [p for p in Cart.objects.all() if p.user ==
                         request.user]
         for p in cart_product:
@@ -96,7 +96,7 @@ def minus_cart(request):
         c.quantity -= 1
         c.save()
         amount = 0.0
-        shipping_amount = 30000
+        shipping_amount = 150000
         cart_product = [p for p in Cart.objects.all() if p.user ==
                         request.user]
         for p in cart_product:
@@ -117,7 +117,7 @@ def remove_cart(request):
         c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
         c.delete()
         amount = 0.0
-        shipping_amount = 30000
+        shipping_amount = 150000
         cart_product = [p for p in Cart.objects.all() if p.user ==
                         request.user]
         for p in cart_product:
@@ -129,10 +129,6 @@ def remove_cart(request):
         }
         return JsonResponse(data)
 
-@login_required
-def address(request):
-    add = Customer.objects.filter(user=request.user)
-    return render(request, 'app/address.html', {'add': add, 'active': 'btn-primary'})
 
 
 @login_required
@@ -141,8 +137,6 @@ def orders(request):
     return render(request, 'app/orders.html', {'orderplaced': op})
 
 # Laptop
-
-
 def laptop(request, data=None):
     if data == None:
         laptops = Product.objects.filter(category='LT')
@@ -236,7 +230,7 @@ def checkout(request):
     add = Customer.objects.filter(user=user)
     cart_items = Cart.objects.filter(user=user)
     amount = 0.0
-    shipping_amount = 30000
+    shipping_amount = 150000
     totalamount = 0.0
     cart_product = [p for p in Cart.objects.all() if p.user == request.user]
     if cart_product:
@@ -246,6 +240,11 @@ def checkout(request):
         totalamount = amount + shipping_amount
     return render(request, 'app/checkout.html', {'add': add, 'totalamount': totalamount, 'cart_items': cart_items})
 
+def delete_info(request):
+    custid = request.GET.get('custid')
+    customer = Customer.objects.get(pk=custid)
+    customer.delete()            
+    return redirect('profile')
 
 @login_required
 def payment_done(request):
@@ -259,13 +258,18 @@ def payment_done(request):
         c.delete()
     return redirect('orders')
 
+class AddressView(View):
+    def get(self, request):
+        add = Customer.objects.filter(user=request.user)
+        return render(request, 'app/address.html', {'add': add, 'active': 'btn-primary'})
+
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
-
+    
     def post(self, request):
         form = CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -280,6 +284,9 @@ class ProfileView(View):
             reg.save()
             messages.success(request, 'Profile Update Successfully')
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
+
+    def delete(seff, request):
+        pass
 
 def search(request):
     q= request.GET['q']

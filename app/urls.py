@@ -19,10 +19,11 @@ urlpatterns = [
     path('removecart/', views.remove_cart),
     path('checkout/', views.checkout, name='checkout'),
     path('paymentdone/', views.payment_done, name='paymentdone '),
+    path('deleteinfo/', views.delete_info, name='deleteinfo '),
 
     path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('address/', views.address, name='address'),
     path('orders/', views.orders, name='orders'),
+    path('address/', views.AddressView.as_view(), name='address'),
 
     path('laptop/', views.laptop, name='laptop'),
     path('accessories/', views.accessories, name='accessories'),
