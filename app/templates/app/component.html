@@ -14,10 +14,13 @@
     <a href= "{% url 'componentdata' 'GG' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Gigabyte </a>
     <a href= "{% url 'componentdata' 'KST' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Kingston </a>
     <br>
-    <br>
     <h2>Filter by price:</h2>
     <a href= "{% url 'componentdata' 'below' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Below 2,000,000 </a>
     <a href= "{% url 'componentdata' 'above' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Above 2,000,000 </a>
+    <br>
+    <h2>Sort by Price</h2>
+    <a href= "{% url 'componentdata' 'high' %}" class = "list-group-item list-group-item-action" aria-current = "true" >High to Low</a>
+    <a href= "{% url 'componentdata' 'low' %}" class = "list-group-item list-group-item-action" aria-current = "true" >Low to High</a>
    </div>
   </div>
  

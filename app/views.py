@@ -14,7 +14,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template import loader
 
 
-
 class ProductView(View):
     def get(self, request):
         totalitem = 0
@@ -130,13 +129,14 @@ def remove_cart(request):
         return JsonResponse(data)
 
 
-
 @login_required
 def orders(request):
     op = OrderPlaced.objects.filter(user=request.user)
     return render(request, 'app/orders.html', {'orderplaced': op})
 
 # Laptop
+
+
 def laptop(request, data=None):
     if data == None:
         laptops = Product.objects.filter(category='LT')
@@ -148,7 +148,13 @@ def laptop(request, data=None):
     elif data == 'above':
         laptops = Product.objects.filter(category='LT').filter(
             discounted_price__gt=20000000)
-    paginator = Paginator(laptops, 6)
+    elif data == 'high':
+        laptops = Product.objects.filter(
+            category='LT').order_by('-discounted_price')
+    elif data == 'low':
+        laptops = Product.objects.filter(
+            category='LT').order_by('discounted_price')
+    paginator = Paginator(laptops, 9)
     page_number = request.GET.get('page')
     try:
         page_obj = paginator.page(page_number)
@@ -158,7 +164,7 @@ def laptop(request, data=None):
     except EmptyPage:
         # Nếu page không có item nào, trả về page cuối cùng
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, 'app/laptop.html', {'laptops': laptops, 'page_obj':page_obj})
+    return render(request, 'app/laptop.html', {'laptops': laptops, 'page_obj': page_obj})
 
 
 # Accessories
@@ -166,14 +172,21 @@ def accessories(request, data=None):
     if data == None:
         accessoriess = Product.objects.filter(category='ACC')
     elif data == 'MZ' or data == 'WW' or data == 'TOM' or data == 'TCN' or data == 'AP' or data == 'LGT' or data == 'Asus' or data == 'SS':
-        accessoriess = Product.objects.filter(category='ACC').filter(brand=data)
+        accessoriess = Product.objects.filter(
+            category='ACC').filter(brand=data)
     elif data == 'below':
         accessoriess = Product.objects.filter(category='ACC').filter(
             discounted_price__lt=2000000)
     elif data == 'above':
         accessoriess = Product.objects.filter(category='ACC').filter(
             discounted_price__gt=2000000)
-    paginator = Paginator(accessoriess, 6)
+    elif data == 'high':
+        accessoriess = Product.objects.filter(
+            category='ACC').order_by('-discounted_price')
+    elif data == 'low':
+        accessoriess = Product.objects.filter(
+            category='ACC').order_by('discounted_price')
+    paginator = Paginator(accessoriess, 9)
     page_number = request.GET.get('page')
     try:
         page_obj = paginator.page(page_number)
@@ -183,7 +196,7 @@ def accessories(request, data=None):
     except EmptyPage:
         # Nếu page không có item nào, trả về page cuối cùng
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, 'app/accessories.html', {'accessoriess': accessoriess, 'page_obj':page_obj})
+    return render(request, 'app/accessories.html', {'accessoriess': accessoriess, 'page_obj': page_obj})
 
 
 # Component
@@ -198,7 +211,13 @@ def component(request, data=None):
     elif data == 'above':
         components = Product.objects.filter(category='C').filter(
             discounted_price__gt=2000000)
-    paginator = Paginator(components, 6)
+    elif data == 'high':
+        components = Product.objects.filter(
+            category='C').order_by('-discounted_price')
+    elif data == 'low':
+        components = Product.objects.filter(
+            category='C').order_by('discounted_price')
+    paginator = Paginator(components, 9)
     page_number = request.GET.get('page')
     try:
         page_obj = paginator.page(page_number)
@@ -208,7 +227,7 @@ def component(request, data=None):
     except EmptyPage:
         # Nếu page không có item nào, trả về page cuối cùng
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, 'app/component.html', {'components': components, 'page_obj':page_obj})
+    return render(request, 'app/component.html', {'components': components, 'page_obj': page_obj})
 
 
 class CustomerRegistrationView(View):
@@ -240,23 +259,34 @@ def checkout(request):
         totalamount = amount + shipping_amount
     return render(request, 'app/checkout.html', {'add': add, 'totalamount': totalamount, 'cart_items': cart_items})
 
+
 def delete_info(request):
     custid = request.GET.get('custid')
-    customer = Customer.objects.get(pk=custid)
-    customer.delete()            
-    return redirect('profile')
+    if custid:
+        customer = Customer.objects.get(pk=custid)
+        customer.delete()
+        return redirect('profile')
+    else:
+        messages.warning(request, "Please chose the adress")
+        return redirect('address')
+
 
 @login_required
 def payment_done(request):
     user = request.user
     custid = request.GET.get('custid')
-    customer = Customer.objects.get(id=custid)
-    cart = Cart.objects.filter(user=user)
-    for c in cart:
-        OrderPlaced(user=user, customer=customer,
-                    product=c.product, quantity=c.quantity).save()
-        c.delete()
-    return redirect('orders')
+    if custid:
+        customer = Customer.objects.get(id=custid)
+        cart = Cart.objects.filter(user=user)
+        for c in cart:
+            OrderPlaced(user=user, customer=customer,
+                        product=c.product, quantity=c.quantity).save()
+            c.delete()
+        return redirect('orders')
+    else:
+        messages.warning(request, "Please chose the adress")
+        return redirect('checkout')
+
 
 class AddressView(View):
     def get(self, request):
@@ -269,7 +299,7 @@ class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
-    
+
     def post(self, request):
         form = CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -285,10 +315,18 @@ class ProfileView(View):
             messages.success(request, 'Profile Update Successfully')
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
 
-    def delete(seff, request):
-        pass
 
 def search(request):
-    q= request.GET['q']
-    data = Product.objects.filter(title__icontains=q).order_by('-id')
-    return render(request, 'app/search.html', {'data':data})
+    try:
+        q = request.GET.get('q')
+    except:
+        q = None
+    if q:
+        data = Product.objects.filter(title__icontains=q).order_by('-id') 
+        if data:
+            context = {'data': data, 'q': q}   
+        else:
+            context = messages.info(request, "The product you were looking for was not found")
+    else:
+        context = messages.info(request, "The product you were looking for was not found")
+    return render(request, 'app/search.html', context )

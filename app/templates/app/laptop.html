@@ -17,14 +17,16 @@
     <a href= "{% url 'laptopdata' 'MSI' %}" class = "list-group-item list-group-item-action" aria-current = "true" > MSI </a>
     <a href= "{% url 'laptopdata' 'LG' %}" class = "list-group-item list-group-item-action" aria-current = "true" > LG </a>
     <br>
-    <br>
     <h2 class="">Filter by price:</h2>
     <a href= "{% url 'laptopdata' 'below' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Below 20,000,000 </a>
     <a href= "{% url 'laptopdata' 'above' %}" class = "list-group-item list-group-item-action" aria-current = "true" > Above 20,000,000 </a>
+    <br>
+    <h2>Sort by Price</h2>
+    <a href= "{% url 'laptopdata' 'high' %}" class = "list-group-item list-group-item-action" aria-current = "true" >High to Low</a>
+    <a href= "{% url 'laptopdata' 'low' %}" class = "list-group-item list-group-item-action" aria-current = "true" >Low to High</a>
    </div>
   </div>
  
-
   <div class="col-sm-9">
    <div class = "row">
     {% for product in page_obj %}

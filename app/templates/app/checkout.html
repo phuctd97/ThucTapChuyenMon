@@ -45,11 +45,18 @@
         <div class="text-center">
           <!--Set up a container element for the button-->
           <div id="paypal-button-container"></div>
+          
           <button type="submit" class="btn btn-secondary mt-3 px-5 fw-bold">Payment on delivery</button>
           <br>
-          <br>
-          <br>
+          {% if messages %}
+            {% for message in messages %}
+            <br>
+            <p {% if message.tags %} class="alert alert-{{message.tags}}" mb-5 {% endif %}>{{message}}</p>
+            {% endfor %}
+          {% endif %}
         </div>
+        <br>
+        <br>
     </form>
   </div>
  </div>
