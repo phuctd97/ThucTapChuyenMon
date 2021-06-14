@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.base import Model
 from django.db.models.deletion import CASCADE
+from phonenumber_field.modelfields import PhoneNumberField
 
 PROVINCE_CHOICE = (
     ('An Giang', 'An Giang'),
@@ -79,7 +80,7 @@ class Customer(models.Model):
     district = models.CharField(max_length=200)
     zipcode = models.CharField(max_length=200)
     province = models.CharField(choices=PROVINCE_CHOICE, max_length=100)
-
+    phone = PhoneNumberField(null=True)
     def __str__(self):
         return str(self.id)
 

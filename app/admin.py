@@ -13,7 +13,7 @@ from .models import (
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name', 'locality',
-                    'district', 'zipcode', 'province']
+                    'district', 'zipcode', 'province','phone']
 
 
 @admin.register(Product)

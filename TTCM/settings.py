@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'phonenumber_field',
 
     'social_django',  # <--
     'app',
@@ -137,3 +138,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 SOCIAL_AUTH_FACEBOOK_KEY = '4312920878732042'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f45a744a9542752f1508909d9de1085d'  # App Secret
+
+PHONENUMBER_DB_FORMAT = 'NATIONAL'
+PHONENUMBER_DEFAULT_REGION = 'VN'

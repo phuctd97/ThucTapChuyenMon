@@ -309,8 +309,9 @@ class ProfileView(View):
             district = form.cleaned_data['district']
             province = form.cleaned_data['province']
             zipcode = form.cleaned_data['zipcode']
+            phone = form.cleaned_data['phone']
             reg = Customer(user=usr, name=name, locality=locality,
-                           district=district, province=province, zipcode=zipcode)
+                           district=district, province=province, zipcode=zipcode, phone=phone)
             reg.save()
             messages.success(request, 'Profile Update Successfully')
         return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
