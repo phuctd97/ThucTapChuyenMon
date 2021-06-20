@@ -38,3 +38,5 @@ Phần III. Các chức năng chưa hoàn thành
 Hướng dẫn sử dụng:
   - Đăng kí tài khoản hoặc đăng nhập bằng FB để đặt hàng
   - tài khoản admim (localhost:8000/admin/):{'username':'admin', 'password': 'tuanphuc97'} 
+
+**DEPLOY ON HEROKU: https://laptopttcm.herokuapp.com/ **
